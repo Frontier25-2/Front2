@@ -68,7 +68,9 @@ export default function DataCollect() {
     const stockData = [
         { code: "005930", name: "삼성전자", price: "71,200원", change: "+1.2%", changeColor: "red" },
         { code: "000660", name: "SK하이닉스", price: "129,500원", change: "-0.8%", changeColor: "blue" },
-        // ... (이하 동일)
+        { code: "035720", name: "카카오", price: "48,500원", change: "+2.3%", changeColor: "red" },
+        { code: "035420", name: "NAVER", price: "195,000원", change: "+0.5%", changeColor: "red" },
+        { code: "051910", name: "LG화학", price: "385,000원", change: "+1.7%", changeColor: "red" },
     ];
 
     return (
@@ -90,7 +92,9 @@ export default function DataCollect() {
                     fontWeight: 600,
                     marginBottom: "0.5rem",
                     color: "#0f172a",
-                }}>네이버 금융 데이터 수집</h2>
+                }}>
+                    네이버 금융 데이터 수집
+                </h2>
                 <p style={{
                     fontSize: "0.9rem",
                     color: "#64748b",
@@ -248,17 +252,96 @@ export default function DataCollect() {
                     borderRadius: "0.5rem",
                     padding: "1rem",
                     marginTop: "1.5rem",
-                    width: "100%",
+                    width: "100%",  // 부모 너비(상위 컴포넌트가 지정한 너비)를 모두 채웁니다.
                     backgroundColor: "white",
-                    boxSizing: "border-box",
+                    boxSizing: "border-box", // 패딩과 border를 포함해서 100% 너비 계산하도록
                 }}
             >
-                {/* (h3, p, table 등 이하 코드 동일...) */}
-                <h3 style={{ fontWeight: 600 }}>수집된 주식 데이터</h3>
-                <p style={{ fontSize: "0.875rem" }}>총 {stockData.length}개 종목</p>
-                <table style={{ width: "100%" }}>
-                    {/* ... (테이블 내용 동일) ... */}
-                </table>
+                {/* 하드코딩 주식 데이터 표 */}
+                <div
+                    style={{
+                        paddingLeft: "0.5rem",
+                        maxWidth: "100%",
+                        overflowX: "auto", // 모바일 등 좁은 화면에서 가로스크롤 가능
+                    }}
+                >
+                    <h3
+                        style={{
+                            fontWeight: 600,
+                            marginBottom: "0.5rem",
+                            color: "#0f172a",
+                        }}
+                    >
+                        수집된 주식 데이터
+                    </h3>
+                    <p
+                        style={{
+                            fontSize: "0.875rem",
+                            color: "#64748b",
+                            marginBottom: "1rem",
+                        }}
+                    >
+                        총 {stockData.length}개 종목
+                    </p>
+
+                    <table
+                        style={{
+                            width: "100%",
+                            borderCollapse: "collapse",
+                            textAlign: "left",
+                            fontSize: "0.9rem",
+                            color: "#334155",
+                        }}
+                    >
+                        <thead>
+                            <tr>
+                                <th style={{ padding: "0.5rem", borderBottom: "1px solid #e5e7eb" }}>종목코드</th>
+                                <th style={{ padding: "0.5rem", borderBottom: "1px solid #e5e7eb" }}>종목명</th>
+                                <th style={{ padding: "0.5rem", borderBottom: "1px solid #e5e7eb" }}>현재가</th>
+                                <th style={{ padding: "0.5rem", borderBottom: "1px solid #e5e7eb" }}>등락률</th>
+                                <th style={{ padding: "0.5rem", borderBottom: "1px solid #e5e7eb", width: "40px" }}>삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {stockData.map(({ code, name, price, change, changeColor }) => (
+                                <tr key={code} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                                    <td style={{ padding: "0.5rem" }}>{code}</td>
+                                    <td style={{ padding: "0.5rem" }}>{name}</td>
+                                    <td style={{ padding: "0.5rem" }}>{price}</td>
+                                    <td
+                                        style={{
+                                            padding: "0.5rem",
+                                            color: changeColor,
+                                            fontWeight: "600",
+                                        }}
+                                    >
+                                        {change}
+                                    </td>
+                                    <td style={{ padding: "0.5rem" }}>
+                                        <button
+                                            type="button"
+                                            style={{
+                                                background: "transparent",
+                                                border: "none",
+                                                color: "black",
+                                                fontWeight: "bold",
+                                                fontSize: "1.1rem",
+                                                cursor: "pointer",
+                                            }}
+                                            aria-label={`종목 ${name} 삭제`}
+                                            onClick={() => {
+                                                // 삭제 기능은 아직 구현하지 않아요.
+                                                alert(`삭제 기능은 아직 구현되지 않았습니다: ${name}`);
+                                            }}
+                                        >
+                                            ×
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </div>
     );
