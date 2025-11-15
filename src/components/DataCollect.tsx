@@ -36,7 +36,7 @@ export default function DataCollect() {
         try {
             // Flask 서버의 /search-news 엔드포인트 호출
             const response = await fetch(`http://127.0.0.1:5000/search-news?query=${encodeURIComponent(searchTerm)}`);
-        
+
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,8 +85,17 @@ export default function DataCollect() {
                 }}
             >
                 {/* (h2, p 태그 등 동일...) */}
-                <h2 style={{ fontSize: "1rem", fontWeight: 600 }}>네이버 금융 데이터 수집</h2>
-                <p style={{ fontSize: "0.9rem", color: "#64748b"}}>
+                <h2 style={{
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    marginBottom: "0.5rem",
+                    color: "#0f172a",
+                }}>네이버 금융 데이터 수집</h2>
+                <p style={{
+                    fontSize: "0.9rem",
+                    color: "#64748b",
+                    marginBottom: "1rem",
+                }}>
                     종목 코드 또는 종목명을 검색하여 데이터를 수집하세요
                 </p>
 
@@ -96,7 +105,17 @@ export default function DataCollect() {
                         placeholder="종목 검색 (예: 삼성전자, 005930)"
                         value={searchTerm}
                         onChange={handleInputChange}
-                        style={{ flexGrow: 1, padding: "0.5rem 0.75rem"}}
+                        style={{
+                            flexGrow: 1,       // flex: 1 효과로 남은 공간 모두 차지
+                            padding: "0.5rem 0.75rem",
+                            borderRadius: "0.375rem",
+                            border: "1px solid #cbd5e1",
+                            backgroundColor: "#F8FAFB",
+                            fontSize: "1rem",
+                            outlineColor: "#3b82f6",
+                            transition: "outline-color 0.2s ease",
+                            boxSizing: "border-box", // 입력 창 내부 패딩 포함해서 크기 계산
+                        }}
                         // 엔터 키로도 검색 실행
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -104,13 +123,45 @@ export default function DataCollect() {
                             }
                         }}
                     />
+                    {/* 검색 */}
                     <button
                         onClick={handleSearch}
-                        style={{ backgroundColor: "#16476A", color: "white"}}
+                        style={{
+                            backgroundColor: "#16476A",
+                            color: "white",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "0.375rem",
+                            fontWeight: 600,
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            border: "none",
+                            transition: "background-color 0.3s ease",
+                            flexShrink: 0,  // 버튼 크기 고정, 축소되지 않게
+                        }}
                         type="button"
                         disabled={isLoading} // 로딩 중 버튼 비활성화
                     >
                         {isLoading ? "검색 중..." : "검색"}
+                    </button>
+                    {/* 수집 */}
+                    <button
+                        onClick={handleSearch}
+                        style={{
+                            backgroundColor: "#16476A",
+                            color: "white",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "0.375rem",
+                            fontWeight: 600,
+                            fontSize: "1rem",
+                            cursor: "pointer",
+                            border: "none",
+                            transition: "background-color 0.3s ease",
+                            flexShrink: 0,  // 버튼 크기 고정, 축소되지 않게
+                        }}
+                        type="button"
+                        disabled={isLoading} // 로딩 중 버튼 비활성화
+                    >
+                        {"수집"}
                     </button>
                 </div>
             </section>
@@ -118,7 +169,7 @@ export default function DataCollect() {
             {/* --- 4. 뉴스 검색 결과 표시 섹션 (★신규 추가★) --- */}
             {/* 로딩, 에러, 또는 검색 결과가 있을 때만 이 섹션을 표시 */}
             {(isLoading || error || newsItems.length > 0) && (
-                 <section
+                <section
                     style={{
                         border: "1px solid #cbd5e1",
                         borderRadius: "0.5rem",
@@ -138,13 +189,13 @@ export default function DataCollect() {
                     >
                         '{searchTerm}' 관련 뉴스
                     </h3>
-                    
+
                     {/* 로딩 중일 때 */}
                     {isLoading && <p>뉴스를 불러오는 중입니다...</p>}
-                    
+
                     {/* 에러 발생 시 */}
                     {error && <p style={{ color: "red", fontWeight: 600 }}>{error}</p>}
-                    
+
                     {/* 결과 표시 (로딩X, 에러X, 아이템 1개 이상) */}
                     {!isLoading && !error && newsItems.length > 0 && (
                         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
@@ -154,8 +205,8 @@ export default function DataCollect() {
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ 
-                                            textDecoration: "none", 
+                                        style={{
+                                            textDecoration: "none",
                                             color: "#1e3a8a", // 링크 색상
                                             fontWeight: 600,
                                             fontSize: "0.95rem"
@@ -163,10 +214,10 @@ export default function DataCollect() {
                                         // Naver API가 <b> 태그를 포함하므로 HTML로 렌더링
                                         dangerouslySetInnerHTML={{ __html: item.title }}
                                     />
-                                    <p 
-                                        style={{ 
-                                            fontSize: "0.85rem", 
-                                            color: "#475569", 
+                                    <p
+                                        style={{
+                                            fontSize: "0.85rem",
+                                            color: "#475569",
                                             marginTop: "0.25rem",
                                             // 긴 설명 자르기
                                             overflow: "hidden",
@@ -182,7 +233,7 @@ export default function DataCollect() {
                             ))}
                         </div>
                     )}
-                    
+
                     {/* 결과가 없을 때 (로딩X, 에러X, 아이템 0개) */}
                     {!isLoading && !error && newsItems.length === 0 && (
                         <p>'{searchTerm}'에 대한 검색 결과가 없습니다.</p>
@@ -203,9 +254,9 @@ export default function DataCollect() {
                 }}
             >
                 {/* (h3, p, table 등 이하 코드 동일...) */}
-                <h3 style={{ fontWeight: 600}}>수집된 주식 데이터</h3>
-                <p style={{ fontSize: "0.875rem"}}>총 {stockData.length}개 종목</p>
-                <table style={{ width: "100%"}}>
+                <h3 style={{ fontWeight: 600 }}>수집된 주식 데이터</h3>
+                <p style={{ fontSize: "0.875rem" }}>총 {stockData.length}개 종목</p>
+                <table style={{ width: "100%" }}>
                     {/* ... (테이블 내용 동일) ... */}
                 </table>
             </section>
